@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apache Airflow - Presentación</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            overflow: hidden;
+        }
+
+        .presentation-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide {
+            display: none;
+            padding: 60px;
+            height: 100vh;
+            overflow-y: auto;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .slide h1 {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .slide h2 {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            color: #ffd700;
+            border-bottom: 3px solid #ffd700;
+            padding-bottom: 10px;
+        }
+
+        .slide h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #87ceeb;
+        }
+
+        .slide p, .slide li {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .slide ul {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .slide li {
+            margin-bottom: 10px;
+        }
+
+        .code-block {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid #555;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .highlight-box {
+            background: rgba(255,255,255,0.1);
+            border-left: 5px solid #ffd700;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(0,0,0,0.3);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1.1rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .pros {
+            background: rgba(0,255,0,0.1);
+            border-left: 5px solid #00ff00;
+        }
+
+        .cons {
+            background: rgba(255,0,0,0.1);
+            border-left: 5px solid #ff4444;
+        }
+
+        .diagram {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+
+        .dag-example {
+            font-family: monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .intro-slide {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #87ceeb;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">12</span>
+        </div>
+
+        <!-- Slide 1: Título -->
+        <div class="slide active intro-slide">
+            <div class="logo">🌊</div>
+            <h1>Apache Airflow</h1>
+            <p class="subtitle">Orquestación de Flujos de Trabajo</p>
+            <p style="font-size: 1.2rem; margin-top: 30px;">Una introducción completa a la plataforma de workflows más popular</p>
+        </div>
+
+        <!-- Slide 2: ¿Qué es Apache Airflow? -->
+        <div class="slide">
+            <h2>¿Qué es Apache Airflow?</h2>
+            <div class="grid-2">
+                <div>
+                    <h3>Definición</h3>
+                    <p>Apache Airflow es una plataforma de código abierto para desarrollar, programar y monitorear flujos de trabajo (workflows) de manera programática.</p>
+                    
+                    <div class="highlight-box">
+                        <strong>En palabras simples:</strong> Es como un "coordinador inteligente" que ejecuta tareas en el orden correcto y en el momento adecuado.
+                    </div>
+                </div>
+                <div>
+                    <h3>Características Principales</h3>
+                    <ul>
+                        <li><strong>Programático:</strong> Los workflows se definen como código Python</li>
+                        <li><strong>Escalable:</strong> Puede manejar miles de tareas</li>
+                        <li><strong>Dinámico:</strong> Los pipelines se generan dinámicamente</li>
+                        <li><strong>Extensible:</strong> Gran ecosistema de plugins</li>
+                        <li><strong>Elegante:</strong> UI web rica y moderna</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Conceptos Clave -->
+        <div class="slide">
+            <h2>Conceptos Fundamentales</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>DAG (Directed Acyclic Graph)</h3>
+                    <p>Un gráfico dirigido sin ciclos que representa el flujo de trabajo. Define las tareas y sus dependencias.</p>
+                </div>
+                <div class="card">
+                    <h3>Task (Tarea)</h3>
+                    <p>Una unidad de trabajo individual dentro de un DAG. Representa una acción específica a ejecutar.</p>
+                </div>
+                <div class="card">
+                    <h3>Operator (Operador)</h3>
+                    <p>Define qué hace una tarea. Existen operadores para diferentes tipos de trabajo (Python, Bash, SQL, etc.)</p>
+                </div>
+                <div class="card">
+                    <h3>Task Instance</h3>
+                    <p>Una ejecución específica de una tarea en una fecha determinada.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Arquitectura -->
+        <div class="slide">
+            <h2>Arquitectura de Airflow</h2>
+            <div class="diagram">
+                <h3>Componentes Principales</h3>
+                <div style="margin: 30px 0; font-size: 1.2rem;">
+                    <div style="margin: 15px 0;">📊 <strong>Web Server</strong> → Interfaz web para monitoreo</div>
+                    <div style="margin: 15px 0;">⚙️ <strong>Scheduler</strong> → Programa y ejecuta tareas</div>
+                    <div style="margin: 15px 0;">👷 <strong>Executor</strong> → Ejecuta las tareas</div>
+                    <div style="margin: 15px 0;">🗄️ <strong>Metadata Database</strong> → Almacena estado y configuración</div>
+                    <div style="margin: 15px 0;">📁 <strong>DAG Directory</strong> → Archivos Python con DAGs</div>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <strong>Flujo:</strong> Scheduler lee DAGs → Programa tareas → Executor las ejecuta → Estado se guarda en DB → Web Server muestra información
+            </div>
+        </div>
+
+        <!-- Slide 5: Ejemplo de DAG Simple -->
+        <div class="slide">
+            <h2>Ejemplo: Mi Primer DAG</h2>
+            <div class="code-block">from datetime import datetime, timedelta
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
+
+# Configuración por defecto
+default_args = {
+    'owner': 'data-team',
+    'depends_on_past': False,
+    'start_date': datetime(2024, 1, 1),
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5)
+}
+
+# Definir el DAG
+dag = DAG(
+    'mi_primer_dag',
+    default_args=default_args,
+    description='Un DAG simple de ejemplo',
+    schedule_interval=timedelta(days=1),
+    catchup=False
+)
+
+# Función Python
+def saludar():
+    return "¡Hola desde Airflow!"
+
+# Tareas
+tarea_1 = BashOperator(
+    task_id='imprimir_fecha',
+    bash_command='date',
+    dag=dag
+)
+
+tarea_2 = PythonOperator(
+    task_id='saludar',
+    python_callable=saludar,
+    dag=dag
+)
+
+# Dependencias
+tarea_1 >> tarea_2</div>
+        </div>
+
+        <!-- Slide 6: Operadores Principales -->
+        <div class="slide">
+            <h2>Tipos de Operadores</h2>
+            <div class="grid-2">
+                <div>
+                    <h3>Operadores Básicos</h3>
+                    <ul>
+                        <li><strong>PythonOperator:</strong> Ejecuta funciones Python</li>
+                        <li><strong>BashOperator:</strong> Ejecuta comandos bash</li>
+                        <li><strong>EmailOperator:</strong> Envía emails</li>
+                        <li><strong>DummyOperator:</strong> No hace nada (útil para estructura)</li>
+                    </ul>
+                    
+                    <h3>Operadores de Base de Datos</h3>
+                    <ul>
+                        <li><strong>SqlOperator:</strong> Ejecuta consultas SQL</li>
+                        <li><strong>PostgresOperator:</strong> Específico para PostgreSQL</li>
+                        <li><strong>MySqlOperator:</strong> Específico para MySQL</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Operadores Cloud</h3>
+                    <ul>
+                        <li><strong>S3Operator:</strong> Interactúa con Amazon S3</li>
+                        <li><strong>BigQueryOperator:</strong> Para Google BigQuery</li>
+                        <li><strong>DockerOperator:</strong> Ejecuta contenedores</li>
+                        <li><strong>KubernetesOperator:</strong> Para clusters K8s</li>
+                    </ul>
+                    
+                    <h3>Operadores de Transferencia</h3>
+                    <ul>
+                        <li><strong>HttpOperator:</strong> Llamadas HTTP/REST</li>
+                        <li><strong>FTPOperator:</strong> Transferencias FTP</li>
+                        <li><strong>SftpOperator:</strong> Transferencias SFTP</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Casos de Uso -->
+        <div class="slide">
+            <h2>Casos de Uso Comunes</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>🔄 ETL/ELT Pipelines</h3>
+                    <p>Extracción, transformación y carga de datos desde múltiples fuentes hacia data warehouses o lakes.</p>
+                </div>
+                <div class="card">
+                    <h3>📊 Procesamiento de Datos</h3>
+                    <p>Limpieza, agregación y análisis de grandes volúmenes de datos de forma programada.</p>
+                </div>
+                <div class="card">
+                    <h3>🤖 Machine Learning</h3>
+                    <p>Automatización de pipelines de ML: entrenamiento, validación, despliegue de modelos.</p>
+                </div>
+                <div class="card">
+                    <h3>📈 Reportes Automatizados</h3>
+                    <p>Generación y distribución automática de reportes y dashboards.</p>
+                </div>
+                <div class="card">
+                    <h3>🔄 Sincronización de Sistemas</h3>
+                    <p>Mantener sincronizados diferentes sistemas y bases de datos.</p>
+                </div>
+                <div class="card">
+                    <h3>🔍 Monitoreo y Alertas</h3>
+                    <p>Verificación del estado de sistemas y envío de alertas automáticas.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Ejemplo ETL -->
+        <div class="slide">
+            <h2>Ejemplo: Pipeline ETL</h2>
+            <div class="dag-example">
+                <h3>Flujo de Trabajo ETL</h3>
+                <div style="margin: 20px 0; font-size: 1.1rem;">
+                    📥 Extraer Datos → 🧹 Limpiar Datos → 🔄 Transformar → 📤 Cargar a DW → ✅ Validar
+                </div>
+            </div>
+            <div class="code-block">from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.operators.postgres_operator import PostgresOperator
+from datetime import datetime, timedelta
+
+def extraer_datos():
+    # Conectar a API o base de datos fuente
+    print("Extrayendo datos de la fuente...")
+    return "datos_extraidos.csv"
+
+def limpiar_datos(ti):
+    archivo = ti.xcom_pull(task_ids='extraer')
+    print(f"Limpiando datos de {archivo}")
+    return "datos_limpios.csv"
+
+def transformar_datos(ti):
+    archivo = ti.xcom_pull(task_ids='limpiar')
+    print(f"Transformando {archivo}")
+    return "datos_transformados.csv"
+
+dag = DAG('etl_pipeline',
+          start_date=datetime(2024, 1, 1),
+          schedule_interval='@daily')
+
+extraer = PythonOperator(task_id='extraer', python_callable=extraer_datos, dag=dag)
+limpiar = PythonOperator(task_id='limpiar', python_callable=limpiar_datos, dag=dag)
+transformar = PythonOperator(task_id='transformar', python_callable=transformar_datos, dag=dag)
+cargar = PostgresOperator(task_id='cargar', sql="INSERT INTO warehouse...", dag=dag)
+
+extraer >> limpiar >> transformar >> cargar</div>
+        </div>
+
+        <!-- Slide 9: Funcionalidades Avanzadas -->
+        <div class="slide">
+            <h2>Funcionalidades Avanzadas</h2>
+            <div class="grid-2">
+                <div>
+                    <h3>🔄 XComs (Cross-Communication)</h3>
+                    <p>Permite que las tareas se pasen datos entre sí.</p>
+                    <div class="code-block"># Enviar datos
+return "mi_resultado"
+
+# Recibir datos
+valor = ti.xcom_pull(task_ids='tarea_anterior')</div>
+                    
+                    <h3>🔀 Branching</h3>
+                    <p>Ejecución condicional de tareas basada en resultados.</p>
+                </div>
+                <div>
+                    <h3>🔍 Sensors</h3>
+                    <p>Esperan a que se cumpla una condición antes de continuar.</p>
+                    <div class="code-block"># Sensor de archivo
+file_sensor = FileSensor(
+    task_id='wait_for_file',
+    filepath='/path/to/file.csv',
+    poke_interval=60
+)</div>
+                    
+                    <h3>⏰ Triggers</h3>
+                    <p>Ejecución diferida de tareas (Airflow 2.2+).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Mejores Prácticas -->
+        <div class="slide">
+            <h2>Mejores Prácticas</h2>
+            <div class="grid-2">
+                <div>
+                    <h3>📝 Diseño de DAGs</h3>
+                    <ul>
+                        <li>Mantener DAGs simples y enfocados</li>
+                        <li>Usar nombres descriptivos</li>
+                        <li>Documentar tasks y DAGs</li>
+                        <li>Configurar timeouts y retries</li>
+                        <li>Usar catchup=False para DAGs nuevos</li>
+                    </ul>
+                    
+                    <h3>🔧 Configuración</h3>
+                    <ul>
+                        <li>Usar Variables y Connections de Airflow</li>
+                        <li>No hardcodear credenciales</li>
+                        <li>Configurar pools para limitar concurrencia</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>⚡ Rendimiento</h3>
+                    <ul>
+                        <li>Evitar bucles en funciones Python</li>
+                        <li>Usar operadores apropiados para cada tarea</li>
+                        <li>Configurar parallelismo correctamente</li>
+                        <li>Monitorear uso de recursos</li>
+                    </ul>
+                    
+                    <h3>🛡️ Seguridad</h3>
+                    <ul>
+                        <li>Usar Fernet encryption para Variables</li>
+                        <li>Configurar RBAC (Role-Based Access Control)</li>
+                        <li>Auditar accesos y cambios</li>
+                        <li>Usar HTTPS en producción</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Ventajas y Desventajas -->
+        <div class="slide">
+            <h2>Ventajas y Desventajas</h2>
+            <div class="pros-cons">
+                <div class="card pros">
+                    <h3>✅ Ventajas</h3>
+                    <ul>
+                        <li><strong>Código como configuración:</strong> Todo en Python</li>
+                        <li><strong>UI rica:</strong> Excelente interfaz web</li>
+                        <li><strong>Escalable:</strong> Maneja workflows complejos</li>
+                        <li><strong>Comunidad activa:</strong> Gran ecosistema</li>
+                        <li><strong>Flexible:</strong> Extensible y customizable</li>
+                        <li><strong>Monitoreo robusto:</strong> Logs y métricas detalladas</li>
+                        <li><strong>Recuperación:</strong> Manejo automático de fallos</li>
+                    </ul>
+                </div>
+                <div class="card cons">
+                    <h3>❌ Desventajas</h3>
+                    <ul>
+                        <li><strong>Curva de aprendizaje:</strong> Requiere conocimiento de Python</li>
+                        <li><strong>Overhead:</strong> Pesado para workflows simples</li>
+                        <li><strong>Configuración inicial:</strong> Setup complejo</li>
+                        <li><strong>Consumo de recursos:</strong> Puede ser intensivo en memoria</li>
+                        <li><strong>Versionado:</strong> Cambios en DAGs pueden ser complicados</li>
+                        <li><strong>Debugging:</strong> Puede ser complejo debuggear</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Conclusiones -->
+        <div class="slide">
+            <h2>Conclusiones y Próximos Pasos</h2>
+            <div class="grid-2">
+                <div>
+                    <h3>🎯 Cuándo usar Airflow</h3>
+                    <ul>
+                        <li>Workflows complejos con dependencias</li>
+                        <li>Necesidad de monitoreo y logging</li>
+                        <li>Pipelines de datos regulares</li>
+                        <li>Integraciones múltiples</li>
+                        <li>Equipos que manejan Python</li>
+                    </ul>
+                    
+                    <h3>🚀 Alternativas</h3>
+                    <ul>
+                        <li><strong>Prefect:</strong> Más moderno, mejor UX</li>
+                        <li><strong>Dagster:</strong> Data-first approach</li>
+                        <li><strong>Luigi:</strong> Más simple, de Spotify</li>
+                        <li><strong>Argo Workflows:</strong> Para Kubernetes</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>📚 Siguientes Pasos</h3>
+                    <ol>
+                        <li>Instalar Airflow localmente</li>
+                        <li>Crear tu primer DAG simple</li>
+                        <li>Explorar diferentes operadores</li>
+                        <li>Practicar con casos de uso reales</li>
+                        <li>Aprender sobre deployment en producción</li>
+                        <li>Explorar integraciones cloud</li>
+                    </ol>
+                    
+                    <h3>🔗 Recursos</h3>
+                    <ul>
+                        <li>Documentación oficial de Airflow</li>
+                        <li>Awesome Airflow (GitHub)</li>
+                        <li>Airflow Summit (conferencia anual)</li>
+                        <li>Comunidad en Slack</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight-box" style="text-align: center; margin-top: 30px;">
+                <h3>¡Gracias por su atención!</h3>
+                <p>¿Preguntas sobre Apache Airflow?</p>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Anterior</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+            
+            document.getElementById('currentSlide').textContent = index + 1;
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            const newIndex = currentSlideIndex + direction;
+            if (newIndex >= 0 && newIndex < totalSlides) {
+                currentSlideIndex = newIndex;
+                showSlide(currentSlideIndex);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            switch(event.key) {
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                    changeSlide(-1);
+                    break;
+                case 'ArrowRight':
+                case 'ArrowDown':
+                case ' ':
+                    changeSlide(1);
+                    break;
+                case 'Home':
+                    currentSlideIndex = 0;
+                    showSlide(currentSlideIndex);
+                    break;
+                case 'End':
+                    currentSlideIndex = totalSlides - 1;
+                    showSlide(currentSlideIndex);
+                    break;
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>
