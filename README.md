@@ -16,7 +16,7 @@ Presentación completa sobre Apache Airflow para workshops y capacitaciones.
 - Ejemplos prácticos de código
 - Casos de uso reales
 - Mejores prácticas
-- [Ver presentación completa](airflow-slides.html)
+- [Ver presentación completa](./airflow-slides.html)
 
 ## 🎯 Audiencia
 
