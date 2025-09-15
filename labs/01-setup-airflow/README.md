@@ -1,105 +1,65 @@
-# Apache Airflow con Docker – Quickstart
+# Lab 01 – Configuración del ambiente con Apache Airflow (Docker)
 
-Este repo contiene un entorno mínimo para aprender y experimentar con **Apache Airflow** usando **Docker Compose**.
+En este laboratorio aprenderás a levantar un entorno de **Apache Airflow** usando **Docker Compose**.
 
-## 📖 ¿Qué es Apache Airflow?
-Apache Airflow es una plataforma open-source para **orquestar flujos de datos (pipelines)** definidos como **DAGs (Directed Acyclic Graphs)** en Python.
-Airflow no procesa datos directamente, sino que **coordina tareas** en distintos sistemas (bases de datos, APIs, big data, cloud).
+## 🚀 Objetivo
+- Instalar y ejecutar Apache Airflow en contenedores Docker.
+- Conocer la estructura de directorios (`dags/`, `logs/`, `plugins/`).
+- Correr tu primer DAG de ejemplo.
 
-> Fuente: *Data Pipelines with Apache Airflow* – Bas Harenslak & Julian de Ruiter
+## 📦 Requisitos previos
+- Docker instalado → [Instrucciones](https://docs.docker.com/get-docker/)
+- Docker Compose instalado → [Instrucciones](https://docs.docker.com/compose/install/)
 
-## 🚀 Requisitos
-- [Docker](https://docs.docker.com/get-docker/)  
-- [Docker Compose](https://docs.docker.com/compose/install/)  
-
-Verifica que están instalados:
+Verifica instalación:
 ```bash
 docker --version
 docker compose version
 ```
 
-## ⚙️ Instalación
-1. Clona este repositorio:
+## ⚙️ Preparación del ambiente
+1. Ve a la carpeta del lab:
 ```bash
-git clone https://github.com/tu-usuario/airflow-docker-quickstart.git
-cd airflow-docker-quickstart
+cd labs/01-setup-airflow
 ```
 
-2. Crea las carpetas necesarias:
-```bash
-mkdir -p dags logs plugins
-```
-
-3. Inicializa la base de datos de Airflow:
+2. Inicializa la base de datos de Airflow:
 ```bash
 docker compose up airflow-init
 ```
 
-## ▶️ Levantar Airflow
-Ejecuta:
+3. Levanta el entorno completo:
 ```bash
 docker compose up
 ```
 
-Esto levantará los siguientes servicios:
-- **Postgres** – base de datos de metadatos.  
-- **Airflow Webserver** – interfaz web (http://localhost:8080).  
-- **Airflow Scheduler** – planifica tareas.  
-- **Airflow Worker** – ejecuta las tareas.  
+## 🌐 Acceso a la interfaz web
+- URL: [http://localhost:8080](http://localhost:8080)
+- Usuario: `airflow`
+- Password: `airflow`
 
-La primera vez, las credenciales por defecto son:
+## 📂 Estructura del directorio
 ```
-usuario: airflow
-password: airflow
-```
-
-## 📂 Estructura de directorios
-```
-├── dags/         # Aquí van tus DAGs en Python
-├── logs/         # Logs de ejecución
-├── plugins/      # Plugins personalizados
-├── docker-compose.yml
-└── README.md
+01-setup-airflow/
+├── dags/              # DAGs de ejemplo
+│   └── hello_dag.py
+├── logs/              # Logs de ejecución (se llenan al correr Airflow)
+├── plugins/           # Plugins personalizados (vacío por ahora)
+├── docker-compose.yml # Configuración de servicios
+└── README.md          # Este archivo
 ```
 
 ## 👨‍💻 Tu primer DAG
-Crea un archivo en `dags/hello_dag.py` con el siguiente contenido:
+Ya tienes incluido el archivo `dags/hello_dag.py`.  
+Para probarlo:
+1. Abre la UI en `http://localhost:8080`  
+2. Activa el DAG `hello_dag`  
+3. Corre una ejecución manual y revisa los logs.
 
-```python
-from airflow import DAG
-from airflow.operators.bash import BashOperator
-from datetime import datetime
-
-with DAG(
-    dag_id="hello_dag",
-    start_date=datetime(2025, 1, 1),
-    schedule="@daily",
-    catchup=False,
-) as dag:
-
-    hello = BashOperator(
-        task_id="hello_task",
-        bash_command="echo 'Hello, Airflow!'"
-    )
-```
-
-Reinicia Airflow y ve a la UI (`http://localhost:8080`) → deberías ver el DAG `hello_dag`.
-
-## 📊 Ejemplos visuales
-Puedes ver ejemplos de DAGs en el libro *Data Pipelines with Apache Airflow*:
-- Figura 1.2: **Pipeline simple en DAG**  
-- Figura 1.6: **Pipeline con ramas paralelas**  
-- Figura 1.9: **Arquitectura de Airflow**  
-
-Incluye capturas de pantalla en tus slides/repositorio para reforzar los conceptos.
-
-## 🛑 Detener todo
+## 🛑 Detener el entorno
 ```bash
 docker compose down
 ```
 
-## 📚 Recursos adicionales
-- [Documentación oficial de Airflow](https://airflow.apache.org/docs/)  
-- Libro *Data Pipelines with Apache Airflow* (Manning, 2021)  
-- [Ejemplos del libro en GitHub](https://github.com/BasPH/data-pipelines-with-apache-airflow)  
-
+---
+¡Listo! Has configurado tu primer ambiente de Apache Airflow con Docker 🎉
