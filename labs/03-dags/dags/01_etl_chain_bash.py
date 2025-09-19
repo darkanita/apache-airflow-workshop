@@ -19,7 +19,11 @@ with DAG(
 
     transform = BashOperator(
         task_id="transform",
-        bash_command=f"awk -F',' 'NR==1{{print $0",name_upper"}} NR>1{{print $0"," toupper($2)}}' {DATA_DIR}/raw.csv > {DATA_DIR}/clean.csv"
+        bash_command=(
+            "awk -F',' -v name_upper='NAME_UPPER' "
+            "'NR==1{print $0\",\"name_upper} NR>1{print $0\",\"toupper($2)}' "
+            f"{DATA_DIR}/raw.csv > {DATA_DIR}/clean.csv"
+        )
     )
 
     load = BashOperator(
